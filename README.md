@@ -23,11 +23,11 @@ npm install duplicate-package-checker-webpack-plugin --save-dev
 Add the plugin to your webpack config:
 
 ```js
-var DuplicatePackagesCheckerPlugin = require('duplicate-package-checker-webpack-plugin');
+var DuplicatePackageCheckerPlugin = require('duplicate-package-checker-webpack-plugin');
 
 module.exports = {
     plugins: [
-      new DuplicatePackagesCheckerPlugin()
+      new DuplicatePackageCheckerPlugin()
     ]
 };
 ```
