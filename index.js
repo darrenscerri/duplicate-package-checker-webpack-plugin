@@ -3,9 +3,9 @@ var findRoot = require('find-root');
 var chalk = require('chalk');
 var _ = require('lodash');
 
-function DuplicatePackagesCheckerPlugin() {}
+function DuplicatePackageCheckerPlugin() {}
 
-DuplicatePackagesCheckerPlugin.prototype.apply = function(compiler) {
+DuplicatePackageCheckerPlugin.prototype.apply = function(compiler) {
   compiler.plugin('emit', function(compilation, callback) {
 
     var modules = {};
@@ -48,5 +48,4 @@ DuplicatePackagesCheckerPlugin.prototype.apply = function(compiler) {
   });
 };
 
-module.exports = DuplicatePackagesCheckerPlugin;
-
+module.exports = DuplicatePackageCheckerPlugin;
