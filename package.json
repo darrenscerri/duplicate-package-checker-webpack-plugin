@@ -1,0 +1,35 @@
+{
+  "name": "duplicate-package-checker-webpack-plugin",
+  "version": "1.0.0",
+  "description": "Webpack plugin that warns you when multiple versions of the same package exist in a build.",
+  "main": "index.js",
+  "dependencies": {
+    "ansi-styles": "^2.2.1",
+    "ansi-regex": "^2.1.1",
+    "escape-string-regexp": "^1.0.5",
+    "chalk": "^1.1.3",
+    "has-ansi": "^2.0.0",
+    "lodash": "^4.17.4",
+    "strip-ansi": "^3.0.1",
+    "find-root": "^1.0.0",
+    "supports-color": "^2.0.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/darrenscerri/duplicate-package-checker-webpack-plugin.git"
+  },
+  "keywords": [
+    "webpack",
+    "plugin"
+  ],
+  "author": "Darren Scerri <darrenscerri@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/darrenscerri/duplicate-package-checker-webpack-plugin/issues"
+  },
+  "homepage": "https://github.com/darrenscerri/duplicate-package-checker-webpack-plugin#readme"
+}
