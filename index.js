@@ -30,19 +30,12 @@ DuplicatePackageCheckerPlugin.prototype.apply = function(compiler) {
 
     var duplicates = _.omitBy(modules, versions => versions.length <= 1);
 
-    console.log('');
-
     if (Object.keys(duplicates).length) {
-      console.log(chalk.yellow('WARNING! Duplicate packages found.'));
 
       _.each(duplicates, (versions, name) => {
-        console.log('<' + chalk.green.bold(name) + '> - ' + chalk.yellow.bold(versions.join(', ')));
+        compilation.warnings.push(new Error('duplicate-package-checker: <' + chalk.green.bold(name) + '> - ' + chalk.yellow.bold(versions.join(', '))));
       });
-    } else {
-      console.log(chalk.green('No duplicate packages found!'));
     }
-
-    console.log('');
 
     callback();
   });
