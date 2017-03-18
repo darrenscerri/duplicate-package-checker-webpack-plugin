@@ -5,10 +5,15 @@ var _ = require('lodash');
 
 function DuplicatePackageCheckerPlugin() {}
 
+function cleanPath(path) {
+  return '.' + path.split('/node_modules/').join('/~/');
+}
+
 DuplicatePackageCheckerPlugin.prototype.apply = function(compiler) {
   compiler.plugin('emit', function(compilation, callback) {
 
-    var modules = {};
+    let context = compilation.compiler.context;
+    let modules = {};
 
     compilation.modules.forEach(module => {
 
@@ -16,25 +21,40 @@ DuplicatePackageCheckerPlugin.prototype.apply = function(compiler) {
         return;
       }
 
-      var root = findRoot(module.resource);
+      let root = findRoot(module.resource);
+      let pkg = require(path.join(root, 'package.json'));
 
-      var pkg = require(path.join(root, 'package.json'));
+      let modulePath = cleanPath(root.replace(context, ''));
+      let version = pkg.version;
 
       modules[pkg.name] = (modules[pkg.name] || []);
 
-      if (!_.includes(modules[pkg.name], pkg.version)) {
-        modules[pkg.name].push(pkg.version);
+      let isSeen = _.find(modules[pkg.name], module => {
+        return module.version === version && module.path === modulePath;
+      });
+
+      if (!isSeen) {
+        modules[pkg.name].push({ version, path: modulePath });
       }
 
     });
 
-    var duplicates = _.omitBy(modules, versions => versions.length <= 1);
+    let duplicates = _.omitBy(modules, versions => versions.length <= 1);
 
     if (Object.keys(duplicates).length) {
 
-      _.each(duplicates, (versions, name) => {
-        compilation.warnings.push(new Error('duplicate-package-checker: <' + chalk.green.bold(name) + '> - ' + chalk.yellow.bold(versions.join(', '))));
+      let error = 'duplicate-package-checker:';
+
+      _.each(duplicates, (instances, name) => {
+        instances = instances.map(version => {
+          return `${chalk.green.bold(version.version)} ${chalk.white.bold(version.path)}`;
+        });
+        error += `\n  ${chalk.yellow.bold('<')}${chalk.green.bold(name)}${chalk.yellow.bold('>')}\n`;
+        error += `    ${instances.join('\n    ')}\n`;
       });
+
+      compilation.warnings.push(new Error(error));
+
     }
 
     callback();
