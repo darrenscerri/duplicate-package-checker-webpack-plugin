@@ -1,5 +1,5 @@
 const path = require('path');
-var DuplicatePackageCheckerPlugin = require('../');
+var DuplicatePackageCheckerPlugin = require('../index.js');
 
 module.exports = {
   entry: './entry.js',
