@@ -21,8 +21,21 @@ DuplicatePackageCheckerPlugin.prototype.apply = function(compiler) {
         return;
       }
 
-      let root = findRoot(module.resource);
-      let pkg = require(path.join(root, 'package.json'));
+      let root;
+      let pkg;
+
+      try {
+        root = findRoot(module.resource);
+        pkg = require(path.join(root, 'package.json'));
+
+        // Skip module if the package.json does not have a name
+        if (!pkg || !pkg.name) {
+          return;
+        }
+      } catch(e) {
+        // Skip on error
+        return;
+      }
 
       let modulePath = cleanPath(root.replace(context, ''));
       let version = pkg.version;
