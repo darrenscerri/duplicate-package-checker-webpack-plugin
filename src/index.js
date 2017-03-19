@@ -9,6 +9,33 @@ function cleanPath(path) {
   return '.' + path.split('/node_modules/').join('/~/');
 }
 
+// Get closest package definition from path
+function getClosestPackage(modulePath) {
+  let root;
+  let pkg;
+
+  // Catch findRoot or require errors
+  try {
+    root = findRoot(modulePath);
+    pkg = require(path.join(root, 'package.json'));
+  } catch(e) {
+    return null;
+  }
+
+  // If the package.json does not have a name property, try again from
+  // one level higher.
+  // https://github.com/jsdnxx/find-root/issues/2
+  // https://github.com/date-fns/date-fns/issues/264#issuecomment-265128399
+  if (!pkg.name) {
+    return getClosestPackage(path.resolve(root, '..'));
+  }
+
+  return {
+    package: pkg,
+    path: root
+  };
+}
+
 DuplicatePackageCheckerPlugin.prototype.apply = function(compiler) {
   compiler.plugin('emit', function(compilation, callback) {
 
@@ -21,23 +48,20 @@ DuplicatePackageCheckerPlugin.prototype.apply = function(compiler) {
         return;
       }
 
-      let root;
       let pkg;
+      let packagePath;
 
-      try {
-        root = findRoot(module.resource);
-        pkg = require(path.join(root, 'package.json'));
+      let closestPackage = getClosestPackage(module.resource);
 
-        // Skip module if the package.json does not have a name
-        if (!pkg || !pkg.name) {
-          return;
-        }
-      } catch(e) {
-        // Skip on error
+      // Skip module if no closest package is found
+      if (!closestPackage) {
         return;
       }
 
-      let modulePath = cleanPath(root.replace(context, ''));
+      pkg = closestPackage.package;
+      packagePath = closestPackage.path;
+
+      let modulePath = cleanPath(packagePath.replace(context, ''));
       let version = pkg.version;
 
       modules[pkg.name] = (modules[pkg.name] || []);
