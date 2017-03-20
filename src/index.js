@@ -67,7 +67,7 @@ DuplicatePackageCheckerPlugin.prototype.apply = function(compiler) {
       modules[pkg.name] = (modules[pkg.name] || []);
 
       let isSeen = _.find(modules[pkg.name], module => {
-        return module.version === version && module.path === modulePath;
+        return module.version === version;
       });
 
       if (!isSeen) {
