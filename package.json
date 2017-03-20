@@ -4,7 +4,7 @@
   "description": "Webpack plugin that warns you when multiple versions of the same package exist in a build.",
   "main": "./lib/index.js",
   "scripts": {
-    "test": "mocha --compilers js:babel-core/register -r babel-polyfill test/index.js",
+    "test": "mocha",
     "build": "babel src --out-dir lib",
     "prepublish": "npm run build"
   },
