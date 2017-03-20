@@ -3,10 +3,16 @@ var findRoot = require('find-root');
 var chalk = require('chalk');
 var _ = require('lodash');
 
-function DuplicatePackageCheckerPlugin() {}
+const defaults = {
+  verbose: false
+};
+
+function DuplicatePackageCheckerPlugin(options) {
+  this.options = _.extend({}, defaults, options);
+}
 
 function cleanPath(path) {
-  return '.' + path.split('/node_modules/').join('/~/');
+  return path.split('/node_modules/').join('/~/');
 }
 
 // Get closest package definition from path
@@ -37,10 +43,23 @@ function getClosestPackage(modulePath) {
 }
 
 DuplicatePackageCheckerPlugin.prototype.apply = function(compiler) {
+  let verbose = this.options.verbose;
+
   compiler.plugin('emit', function(compilation, callback) {
 
     let context = compilation.compiler.context;
     let modules = {};
+
+    function cleanPathRelativeToContext(modulePath) {
+      let cleanedPath = cleanPath(modulePath);
+
+      // Make relative to compilation context
+      if (cleanedPath.indexOf(context) === 0) {
+        cleanedPath = '.' + cleanedPath.replace(context, '');
+      }
+
+      return cleanedPath;
+    }
 
     compilation.modules.forEach(module => {
 
@@ -61,7 +80,8 @@ DuplicatePackageCheckerPlugin.prototype.apply = function(compiler) {
       pkg = closestPackage.package;
       packagePath = closestPackage.path;
 
-      let modulePath = cleanPath(packagePath.replace(context, ''));
+      let modulePath = cleanPathRelativeToContext(packagePath);
+
       let version = pkg.version;
 
       modules[pkg.name] = (modules[pkg.name] || []);
@@ -71,7 +91,14 @@ DuplicatePackageCheckerPlugin.prototype.apply = function(compiler) {
       });
 
       if (!isSeen) {
-        modules[pkg.name].push({ version, path: modulePath });
+        let entry = { version, path: modulePath };
+
+        if (verbose) {
+          let issuer = module.issuer && module.issuer.resource ? cleanPathRelativeToContext(module.issuer.resource) : null;
+          entry.issuer = issuer;
+        }
+
+        modules[pkg.name].push(entry);
       }
 
     });
@@ -84,7 +111,11 @@ DuplicatePackageCheckerPlugin.prototype.apply = function(compiler) {
 
       _.each(duplicates, (instances, name) => {
         instances = instances.map(version => {
-          return `${chalk.green.bold(version.version)} ${chalk.white.bold(version.path)}`;
+          let str = `${chalk.green.bold(version.version)} ${chalk.white.bold(version.path)}`;
+          if (verbose && version.issuer) {
+             str += ` from ${chalk.white.bold(version.issuer)}`;
+          }
+          return str;
         });
         error += `\n  ${chalk.yellow.bold('<')}${chalk.green.bold(name)}${chalk.yellow.bold('>')}\n`;
         error += `    ${instances.join('\n    ')}\n`;

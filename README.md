@@ -34,6 +34,14 @@ module.exports = {
 };
 ```
 
+You can also pass an object with configurable options:
+```js
+new DuplicatePackageCheckerPlugin({
+  // Also show module that is requiring each duplicate package
+   verbose: true
+})
+```
+
 [downloads-image]: https://img.shields.io/npm/dt/duplicate-package-checker-webpack-plugin.svg
 [npm-url]: https://www.npmjs.com/package/duplicate-package-checker-webpack-plugin
 [npm-image]: https://img.shields.io/npm/v/duplicate-package-checker-webpack-plugin.svg
