@@ -4,7 +4,7 @@
 
 Webpack plugin that warns you when multiple versions of the same package exist in a build.
 
-![duplicate-package-checker-webpack-plugin](https://cloud.githubusercontent.com/assets/729230/21966496/c6809252-db74-11e6-91d5-73d13e07e615.png)
+![duplicate-package-checker-webpack-plugin](https://cloud.githubusercontent.com/assets/729230/24270619/357ebc62-1016-11e7-9b04-f79fd5a72db7.png)
 
 ## Why?
 
