@@ -4,7 +4,8 @@ var chalk = require('chalk');
 var _ = require('lodash');
 
 const defaults = {
-  verbose: false
+  verbose: false,
+  errorOnDuplicate: false
 };
 
 function DuplicatePackageCheckerPlugin(options) {
@@ -44,6 +45,7 @@ function getClosestPackage(modulePath) {
 
 DuplicatePackageCheckerPlugin.prototype.apply = function(compiler) {
   let verbose = this.options.verbose;
+  let errorOnDuplicate = this.options.errorOnDuplicate;
 
   compiler.plugin('emit', function(compilation, callback) {
 
@@ -121,8 +123,8 @@ DuplicatePackageCheckerPlugin.prototype.apply = function(compiler) {
         error += `    ${instances.join('\n    ')}\n`;
       });
 
-      compilation.warnings.push(new Error(error));
-
+      let array = errorOnDuplicate ? compilation.errors : compilation.warnings;
+      array.push(new Error(error));
     }
 
     callback();
