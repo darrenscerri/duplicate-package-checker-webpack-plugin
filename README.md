@@ -39,7 +39,7 @@ You can also pass an object with configurable options:
 new DuplicatePackageCheckerPlugin({
   // Also show module that is requiring each duplicate package
   verbose: true,
-  // Have webpack exit with an error if duplicates are found
+  // Emit errors instead of warnings
   emitError: true
 })
 ```
