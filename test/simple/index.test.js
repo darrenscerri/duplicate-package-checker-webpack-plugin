@@ -25,7 +25,7 @@ describe('Simple dependency tree', function() {
   it('should output errors', function(done) {
     let error = "duplicate-package-checker:\n  <a>\n    1.0.0 ./~/a\n    2.0.0 ./~/b/~/a\n\n  <b>\n    1.0.0 ./~/b\n    2.0.0 ./~/c/~/d/~/b\n";
 
-    webpack(MakeConfig({ errorOnDuplicate: true }), function(err, stats) {
+    webpack(MakeConfig({ emitError: true }), function(err, stats) {
       assert.equal(stripAnsi(stats.compilation.errors[0].message), error);
       done();
     });
