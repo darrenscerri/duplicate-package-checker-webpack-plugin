@@ -38,7 +38,9 @@ You can also pass an object with configurable options:
 ```js
 new DuplicatePackageCheckerPlugin({
   // Also show module that is requiring each duplicate package
-   verbose: true
+  verbose: true,
+  // Emit errors instead of warnings
+  emitError: true
 })
 ```
 
