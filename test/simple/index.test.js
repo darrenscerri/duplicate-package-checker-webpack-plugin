@@ -30,4 +30,28 @@ describe('Simple dependency tree', function() {
       done();
     });
   });
+
+  it('should not output warnings for package "a"', function(done) {
+    let warning = "duplicate-package-checker:\n  <b>\n    1.0.0 ./~/b\n    2.0.0 ./~/c/~/d/~/b\n";
+
+    webpack(MakeConfig({
+      exclude: function (instance) {
+        return instance.name === 'a';
+      }
+    }), function(err, stats) {
+      assert.equal(stripAnsi(stats.compilation.warnings[0].message), warning);
+      done();
+    });
+  });
+
+  it('should not output warnings', function(done) {
+    webpack(MakeConfig({
+      exclude: function (instance) {
+        return instance.issuer === './entry.js';
+      }
+    }), function(err, stats) {
+      assert(stats.compilation.warnings.length === 0);
+      done();
+    });
+  });
 });

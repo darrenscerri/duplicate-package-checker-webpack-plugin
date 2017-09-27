@@ -40,7 +40,21 @@ new DuplicatePackageCheckerPlugin({
   // Also show module that is requiring each duplicate package
   verbose: true,
   // Emit errors instead of warnings
-  emitError: true
+  emitError: true,
+  /**
+   * Exclude instances of packages from the results.
+   * If all instances of a package are excluded, or all instances except one,
+   * then the package is no longer considered duplicated and won't be emitted as a warning/error.
+   * @param {Object} instance
+   * @param {string} instance.name The name of the package
+   * @param {string} instance.version The version of the package
+   * @param {string} instance.path Absolute path to the package
+   * @param {?string} instance.issuer Absolute path to the module that requested the package
+   * @returns {boolean} true to exclude the instance, false otherwise
+   */
+  exclude(instance) {
+    return instance.name === 'fbjs';
+  }
 })
 ```
 
