@@ -31,7 +31,7 @@ describe('Simple dependency tree', function() {
     });
   });
 
-  it('should not output warnings for package "a"', function(done) {
+  it('should ignore excluded duplicates by name', function(done) {
     let warning = "duplicate-package-checker:\n  <b>\n    1.0.0 ./~/b\n    2.0.0 ./~/c/~/d/~/b\n";
 
     webpack(MakeConfig({
@@ -44,7 +44,7 @@ describe('Simple dependency tree', function() {
     });
   });
 
-  it('should not output warnings', function(done) {
+  it('should ignore excluded duplicates by issuer', function(done) {
     webpack(MakeConfig({
       exclude: function (instance) {
         return instance.issuer === './entry.js';
