@@ -5,7 +5,8 @@ var _ = require('lodash');
 
 const defaults = {
   verbose: false,
-  emitError: false
+  emitError: false,
+  exclude: null
 };
 
 function DuplicatePackageCheckerPlugin(options) {
@@ -46,6 +47,7 @@ function getClosestPackage(modulePath) {
 DuplicatePackageCheckerPlugin.prototype.apply = function(compiler) {
   let verbose = this.options.verbose;
   let emitError = this.options.emitError;
+  let exclude = this.options.exclude;
 
   compiler.plugin('emit', function(compilation, callback) {
 
@@ -95,17 +97,32 @@ DuplicatePackageCheckerPlugin.prototype.apply = function(compiler) {
       if (!isSeen) {
         let entry = { version, path: modulePath };
 
-        if (verbose) {
-          let issuer = module.issuer && module.issuer.resource ? cleanPathRelativeToContext(module.issuer.resource) : null;
-          entry.issuer = issuer;
-        }
+        let issuer = module.issuer && module.issuer.resource ? cleanPathRelativeToContext(module.issuer.resource) : null;
+        entry.issuer = issuer;
 
         modules[pkg.name].push(entry);
       }
 
     });
 
-    let duplicates = _.omitBy(modules, versions => versions.length <= 1);
+    let duplicates = _.omitBy(modules, (instances, name) => {
+      if (instances.length <= 1) {
+        return true;
+      }
+
+      if (exclude) {
+        instances = instances.filter(instance => {
+          instance = Object.assign({ name }, instance);
+          return !exclude(instance);
+        });
+        
+        if (instances.length <= 1) {
+          return true;
+        }
+      }
+
+      return false;
+    });
 
     if (Object.keys(duplicates).length) {
 
