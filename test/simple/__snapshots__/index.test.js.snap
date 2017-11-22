@@ -7,7 +7,8 @@ exports[`Simple dependency tree should ignore excluded duplicates by name 1`] = 
     [32m[1m2.0.0[22m[39m [37m[1m./~/c/~/d/~/b[22m[39m
 
 [37m[1mCheck how you can resolve duplicate packages: [22m[39m
-https://github.com/darrenscerri/duplicate-package-checker-webpack-plugin#resolving-duplicate-packages-in-your-bundle"
+https://github.com/darrenscerri/duplicate-package-checker-webpack-plugin#resolving-duplicate-packages-in-your-bundle
+"
 `;
 
 exports[`Simple dependency tree should output errors 1`] = `
@@ -25,7 +26,8 @@ exports[`Simple dependency tree should output errors 2`] = `
     [32m[1m2.0.0[22m[39m [37m[1m./~/c/~/d/~/b[22m[39m
 
 [37m[1mCheck how you can resolve duplicate packages: [22m[39m
-https://github.com/darrenscerri/duplicate-package-checker-webpack-plugin#resolving-duplicate-packages-in-your-bundle"
+https://github.com/darrenscerri/duplicate-package-checker-webpack-plugin#resolving-duplicate-packages-in-your-bundle
+"
 `;
 
 exports[`Simple dependency tree should output warnings 1`] = `
@@ -43,7 +45,8 @@ exports[`Simple dependency tree should output warnings 2`] = `
     [32m[1m2.0.0[22m[39m [37m[1m./~/c/~/d/~/b[22m[39m
 
 [37m[1mCheck how you can resolve duplicate packages: [22m[39m
-https://github.com/darrenscerri/duplicate-package-checker-webpack-plugin#resolving-duplicate-packages-in-your-bundle"
+https://github.com/darrenscerri/duplicate-package-checker-webpack-plugin#resolving-duplicate-packages-in-your-bundle
+"
 `;
 
 exports[`Simple dependency tree should output warnings in verbose 1`] = `
@@ -61,5 +64,6 @@ exports[`Simple dependency tree should output warnings in verbose 2`] = `
     [32m[1m2.0.0[22m[39m [37m[1m./~/c/~/d/~/b[22m[39m from [37m[1m./~/c/~/d/index.js[22m[39m
 
 [37m[1mCheck how you can resolve duplicate packages: [22m[39m
-https://github.com/darrenscerri/duplicate-package-checker-webpack-plugin#resolving-duplicate-packages-in-your-bundle"
+https://github.com/darrenscerri/duplicate-package-checker-webpack-plugin#resolving-duplicate-packages-in-your-bundle
+"
 `;
