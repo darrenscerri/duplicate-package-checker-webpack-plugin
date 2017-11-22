@@ -1,6 +1,5 @@
 var webpack = require("webpack");
 var assert = require("assert");
-var stripAnsi = require("strip-ansi");
 var config = require("./webpack.config");
 
 describe("npm v2 packages", function() {
