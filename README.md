@@ -58,6 +58,47 @@ new DuplicatePackageCheckerPlugin({
 })
 ```
 
+## Resolving duplicate packages in your bundle
+
+There are multiple ways you can go about resolving duplicate packages in your bundle, the right solution mostly depends on what tools you're using.
+
+### Webpack `resolve.alias`
+
+Add an entry in [`resolve.alias`](https://webpack.github.io/docs/configuration.html#resolve-alias) which will configure Webpack to route any package references to a single specified path.
+
+If Lodash is duplicated in your bundle, the following configuration would render all Lodash imports to always refer to the Lodash instance found at `./node_modules/lodash`.
+
+```
+alias: {
+  lodash: path.resolve(__dirname, 'node_modules/lodash'),
+}
+```
+
+### Yarn resolutions
+
+Yarn supports ["selective version resolution"](https://yarnpkg.com/lang/en/docs/selective-version-resolutions) which allows you to enforce a common version for a package required by dependencies.
+
+**package.json** 
+```
+{
+  "dependencies": {
+    "lodash": "4.17.0",
+    "old-package-with-old-lodash": "*"
+  },
+  "resolutions": {
+    "old-package-with-old-lodash/lodash": "4.17.0"
+  }
+}
+```
+
+### Bump your dependencies
+
+If your project is using an old version of a package and a dependency is using a newer version of that package, consider upgrading your project to use a newer version of that package.
+
+### File issues!
+
+If your project has a dependency and it's using an outdated version of a package, file an issue and notify the author to update the dependencies.
+
 [downloads-image]: https://img.shields.io/npm/dt/duplicate-package-checker-webpack-plugin.svg
 [npm-url]: https://www.npmjs.com/package/duplicate-package-checker-webpack-plugin
 [npm-image]: https://img.shields.io/npm/v/duplicate-package-checker-webpack-plugin.svg

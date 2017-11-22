@@ -1,9 +1,11 @@
+"use strict";
+
 var path = require("path");
 var findRoot = require("find-root");
 var chalk = require("chalk");
 var _ = require("lodash");
 
-const defaults = {
+var defaults = {
   verbose: false,
   emitError: false,
   exclude: null
@@ -19,8 +21,8 @@ function cleanPath(path) {
 
 // Get closest package definition from path
 function getClosestPackage(modulePath) {
-  let root;
-  let pkg;
+  var root = void 0;
+  var pkg = void 0;
 
   // Catch findRoot or require errors
   try {
@@ -45,16 +47,16 @@ function getClosestPackage(modulePath) {
 }
 
 DuplicatePackageCheckerPlugin.prototype.apply = function(compiler) {
-  let verbose = this.options.verbose;
-  let emitError = this.options.emitError;
-  let exclude = this.options.exclude;
+  var verbose = this.options.verbose;
+  var emitError = this.options.emitError;
+  var exclude = this.options.exclude;
 
   compiler.plugin("emit", function(compilation, callback) {
-    let context = compilation.compiler.context;
-    let modules = {};
+    var context = compilation.compiler.context;
+    var modules = {};
 
     function cleanPathRelativeToContext(modulePath) {
-      let cleanedPath = cleanPath(modulePath);
+      var cleanedPath = cleanPath(modulePath);
 
       // Make relative to compilation context
       if (cleanedPath.indexOf(context) === 0) {
@@ -64,15 +66,15 @@ DuplicatePackageCheckerPlugin.prototype.apply = function(compiler) {
       return cleanedPath;
     }
 
-    compilation.modules.forEach(module => {
+    compilation.modules.forEach(function(module) {
       if (!module.resource) {
         return;
       }
 
-      let pkg;
-      let packagePath;
+      var pkg = void 0;
+      var packagePath = void 0;
 
-      let closestPackage = getClosestPackage(module.resource);
+      var closestPackage = getClosestPackage(module.resource);
 
       // Skip module if no closest package is found
       if (!closestPackage) {
@@ -82,20 +84,20 @@ DuplicatePackageCheckerPlugin.prototype.apply = function(compiler) {
       pkg = closestPackage.package;
       packagePath = closestPackage.path;
 
-      let modulePath = cleanPathRelativeToContext(packagePath);
+      var modulePath = cleanPathRelativeToContext(packagePath);
 
-      let version = pkg.version;
+      var version = pkg.version;
 
       modules[pkg.name] = modules[pkg.name] || [];
 
-      let isSeen = _.find(modules[pkg.name], module => {
+      var isSeen = _.find(modules[pkg.name], function(module) {
         return module.version === version;
       });
 
       if (!isSeen) {
-        let entry = { version, path: modulePath };
+        var entry = { version: version, path: modulePath };
 
-        let issuer =
+        var issuer =
           module.issuer && module.issuer.resource
             ? cleanPathRelativeToContext(module.issuer.resource)
             : null;
@@ -105,14 +107,14 @@ DuplicatePackageCheckerPlugin.prototype.apply = function(compiler) {
       }
     });
 
-    let duplicates = _.omitBy(modules, (instances, name) => {
+    var duplicates = _.omitBy(modules, function(instances, name) {
       if (instances.length <= 1) {
         return true;
       }
 
       if (exclude) {
-        instances = instances.filter(instance => {
-          instance = Object.assign({ name }, instance);
+        instances = instances.filter(function(instance) {
+          instance = Object.assign({ name: name }, instance);
           return !exclude(instance);
         });
 
@@ -125,27 +127,30 @@ DuplicatePackageCheckerPlugin.prototype.apply = function(compiler) {
     });
 
     if (Object.keys(duplicates).length) {
-      let array = emitError ? compilation.errors : compilation.warnings;
+      var error = "duplicate-package-checker:";
 
-      _.each(duplicates, (instances, name) => {
-        let error =
-          name +
-          "\n" +
-          chalk.reset("  Multiple versions of ") +
-          chalk.green.bold(name) +
-          chalk.white(` found:\n`);
-        instances = instances.map(version => {
-          let str = `${chalk.green.bold(version.version)} ${chalk.white.bold(
-            version.path
-          )}`;
+      _.each(duplicates, function(instances, name) {
+        instances = instances.map(function(version) {
+          var str =
+            chalk.green.bold(version.version) +
+            " " +
+            chalk.white.bold(version.path);
           if (verbose && version.issuer) {
-            str += ` from ${chalk.white.bold(version.issuer)}`;
+            str += " from " + chalk.white.bold(version.issuer);
           }
           return str;
         });
-        error += `    ${instances.join("\n    ")}\n`;
-        array.push(new Error(error));
+        error +=
+          "\n  " +
+          chalk.yellow.bold("<") +
+          chalk.green.bold(name) +
+          chalk.yellow.bold(">") +
+          "\n";
+        error += "    " + instances.join("\n    ") + "\n";
       });
+
+      var array = emitError ? compilation.errors : compilation.warnings;
+      array.push(new Error(error));
     }
 
     callback();

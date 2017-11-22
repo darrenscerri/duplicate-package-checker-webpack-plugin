@@ -9,6 +9,9 @@ module.exports = function(options) {
       path: path.resolve(__dirname, "dist"),
       filename: "bundle.js"
     },
-    plugins: [new DuplicatePackageCheckerPlugin(options)]
+    plugins: [new DuplicatePackageCheckerPlugin(options)],
+    stats: {
+      warnings: false
+    }
   };
 };
