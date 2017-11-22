@@ -6,6 +6,8 @@ describe("Simple dependency tree", function() {
   it("should output warnings", function(done) {
     webpack(MakeConfig(), function(err, stats) {
       expect(stats.compilation.warnings[0].message).toMatchSnapshot();
+      expect(stats.compilation.warnings[1].message).toMatchSnapshot();
+      assert(stats.compilation.warnings.length === 2);
       done();
     });
   });
@@ -13,6 +15,8 @@ describe("Simple dependency tree", function() {
   it("should output warnings in verbose", function(done) {
     webpack(MakeConfig({ verbose: true }), function(err, stats) {
       expect(stats.compilation.warnings[0].message).toMatchSnapshot();
+      expect(stats.compilation.warnings[1].message).toMatchSnapshot();
+      assert(stats.compilation.warnings.length === 2);
       done();
     });
   });
@@ -20,6 +24,9 @@ describe("Simple dependency tree", function() {
   it("should output errors", function(done) {
     webpack(MakeConfig({ emitError: true }), function(err, stats) {
       expect(stats.compilation.errors[0].message).toMatchSnapshot();
+      expect(stats.compilation.errors[1].message).toMatchSnapshot();
+      assert(stats.compilation.errors.length === 2);
+      assert(stats.compilation.warnings.length === 0);
       done();
     });
   });
@@ -33,6 +40,7 @@ describe("Simple dependency tree", function() {
       }),
       function(err, stats) {
         expect(stats.compilation.warnings[0].message).toMatchSnapshot();
+        assert(stats.compilation.warnings.length === 1);
         done();
       }
     );

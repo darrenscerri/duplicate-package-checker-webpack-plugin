@@ -124,9 +124,12 @@ DuplicatePackageCheckerPlugin.prototype.apply = function(compiler) {
       return false;
     });
 
-    if (Object.keys(duplicates).length) {
+    const duplicateCount = Object.keys(duplicates).length;
+
+    if (duplicateCount) {
       let array = emitError ? compilation.errors : compilation.warnings;
 
+      let i = 0;
       _.each(duplicates, (instances, name) => {
         let error =
           name +
@@ -144,6 +147,12 @@ DuplicatePackageCheckerPlugin.prototype.apply = function(compiler) {
           return str;
         });
         error += `    ${instances.join("\n    ")}\n`;
+        // only on last warning
+        if (++i === duplicateCount) {
+          error += `\n${chalk.white.bold(
+            "Check how you can resolve duplicate packages: "
+          )}\nhttps://github.com/darrenscerri/duplicate-package-checker-webpack-plugin#resolving-duplicate-packages-in-your-bundle\n`;
+        }
         array.push(new Error(error));
       });
     }
