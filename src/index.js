@@ -5,6 +5,7 @@ var _ = require("lodash");
 
 const defaults = {
   verbose: false,
+  showHelp: true,
   emitError: false,
   exclude: null
 };
@@ -46,6 +47,7 @@ function getClosestPackage(modulePath) {
 
 DuplicatePackageCheckerPlugin.prototype.apply = function(compiler) {
   let verbose = this.options.verbose;
+  let showHelp = this.options.showHelp;
   let emitError = this.options.emitError;
   let exclude = this.options.exclude;
 
@@ -148,7 +150,7 @@ DuplicatePackageCheckerPlugin.prototype.apply = function(compiler) {
         });
         error += `    ${instances.join("\n    ")}\n`;
         // only on last warning
-        if (++i === duplicateCount) {
+        if (showHelp && ++i === duplicateCount) {
           error += `\n${chalk.white.bold(
             "Check how you can resolve duplicate packages: "
           )}\nhttps://github.com/darrenscerri/duplicate-package-checker-webpack-plugin#resolving-duplicate-packages-in-your-bundle\n`;
