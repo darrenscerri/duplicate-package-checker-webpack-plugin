@@ -37,10 +37,12 @@ module.exports = {
 You can also pass an object with configurable options:
 ```js
 new DuplicatePackageCheckerPlugin({
-  // Also show module that is requiring each duplicate package
+  // Also show module that is requiring each duplicate package (default: false)
   verbose: true,
-  // Emit errors instead of warnings
+  // Emit errors instead of warnings (default: false)
   emitError: true,
+  // Show help message with URL to instructions if any error appears (default: true)
+  showHelp: false,
   /**
    * Exclude instances of packages from the results.
    * If all instances of a package are excluded, or all instances except one,
