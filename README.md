@@ -41,7 +41,7 @@ new DuplicatePackageCheckerPlugin({
   verbose: true,
   // Emit errors instead of warnings (default: false)
   emitError: true,
-  // Show help message with URL to instructions if any error appears (default: true)
+  // Show help message if duplicate packages are found (default: true)
   showHelp: false,
   /**
    * Exclude instances of packages from the results.
