@@ -59,4 +59,16 @@ describe("Simple dependency tree", function() {
       }
     );
   });
+  it("should respect showHelp option", function(done) {
+    webpack(
+      MakeConfig({
+        showHelp: false
+      }),
+      function(err, stats) {
+        expect(stats.compilation.warnings[0]).toMatchSnapshot();
+        expect(stats.compilation.warnings[1]).toMatchSnapshot();
+        done();
+      }
+    );
+  });
 });
