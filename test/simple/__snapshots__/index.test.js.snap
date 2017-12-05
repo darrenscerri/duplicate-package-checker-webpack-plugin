@@ -67,3 +67,19 @@ exports[`Simple dependency tree should output warnings in verbose 2`] = `
 https://github.com/darrenscerri/duplicate-package-checker-webpack-plugin#resolving-duplicate-packages-in-your-bundle
 "
 `;
+
+exports[`Simple dependency tree should respect showHelp option 1`] = `
+[Error: a
+[0m  Multiple versions of [0m[32m[1ma[22m[39m[37m found:[39m
+[37m[39m    [32m[1m1.0.0[22m[39m [37m[1m./~/a[22m[39m
+    [32m[1m2.0.0[22m[39m [37m[1m./~/b/~/a[22m[39m
+]
+`;
+
+exports[`Simple dependency tree should respect showHelp option 2`] = `
+[Error: b
+[0m  Multiple versions of [0m[32m[1mb[22m[39m[37m found:[39m
+[37m[39m    [32m[1m1.0.0[22m[39m [37m[1m./~/b[22m[39m
+    [32m[1m2.0.0[22m[39m [37m[1m./~/c/~/d/~/b[22m[39m
+]
+`;
