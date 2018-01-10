@@ -8,7 +8,7 @@ Webpack plugin that warns you when multiple versions of the same package exist i
 
 ## Why?
 
-It might be possible that a single package gets included multiple times in a Webpack build due to different package versions. This situation may happen without any warning,  resulting in extra bloat in your build and may lead to hard-to-find bugs.
+It might be possible that a single package gets included multiple times in a Webpack build due to different package versions. This situation may happen without any warning, resulting in extra bloat in your build and may lead to hard-to-find bugs.
 
 This plugin will warn you of such cases to minimize build size and avoid bugs caused by unintended duplicate packages.
 
@@ -25,16 +25,15 @@ npm install duplicate-package-checker-webpack-plugin --save-dev
 Add the plugin to your webpack config:
 
 ```js
-var DuplicatePackageCheckerPlugin = require('duplicate-package-checker-webpack-plugin');
+var DuplicatePackageCheckerPlugin = require("duplicate-package-checker-webpack-plugin");
 
 module.exports = {
-    plugins: [
-      new DuplicatePackageCheckerPlugin()
-    ]
+  plugins: [new DuplicatePackageCheckerPlugin()]
 };
 ```
 
 You can also pass an object with configurable options:
+
 ```js
 new DuplicatePackageCheckerPlugin({
   // Also show module that is requiring each duplicate package (default: false)
@@ -55,9 +54,9 @@ new DuplicatePackageCheckerPlugin({
    * @returns {boolean} true to exclude the instance, false otherwise
    */
   exclude(instance) {
-    return instance.name === 'fbjs';
+    return instance.name === "fbjs";
   }
-})
+});
 ```
 
 ## Resolving duplicate packages in your bundle
@@ -86,7 +85,8 @@ Yarn allows [flat installations](https://yarnpkg.com/lang/en/docs/cli/install/#t
 
 If you want more control over your overridden dependency versions and don't feel like using `yarn install --flat`, yarn supports ["selective version resolution"](https://yarnpkg.com/lang/en/docs/selective-version-resolutions) which allows you to enforce specific versions for each dependency.
 
-**package.json** 
+**package.json**
+
 ```
 {
   "dependencies": {
