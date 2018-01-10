@@ -2,12 +2,14 @@ var path = require("path");
 var findRoot = require("find-root");
 var chalk = require("chalk");
 var _ = require("lodash");
+var semver = require("semver");
 
 const defaults = {
   verbose: false,
   showHelp: true,
   emitError: false,
-  exclude: null
+  exclude: null,
+  strict: true
 };
 
 function DuplicatePackageCheckerPlugin(options) {
@@ -50,6 +52,7 @@ DuplicatePackageCheckerPlugin.prototype.apply = function(compiler) {
   let showHelp = this.options.showHelp;
   let emitError = this.options.emitError;
   let exclude = this.options.exclude;
+  let strict = this.options.strict;
 
   compiler.plugin("emit", function(compilation, callback) {
     let context = compilation.compiler.context;
@@ -107,24 +110,46 @@ DuplicatePackageCheckerPlugin.prototype.apply = function(compiler) {
       }
     });
 
-    let duplicates = _.omitBy(modules, (instances, name) => {
+    let duplicates = {};
+
+    for (let name in modules) {
+      const instances = modules[name];
+
       if (instances.length <= 1) {
-        return true;
+        continue;
+      }
+
+      let filtered = instances;
+      if (!strict) {
+        filtered = [];
+        const groups = _.groupBy(instances, instance =>
+          semver.major(instance.version)
+        );
+
+        _.each(groups, group => {
+          if (group.length > 1) {
+            filtered = filtered.concat(group);
+          }
+        });
+
+        if (filtered.length <= 1) {
+          continue;
+        }
       }
 
       if (exclude) {
-        instances = instances.filter(instance => {
+        filtered = filtered.filter(instance => {
           instance = Object.assign({ name }, instance);
           return !exclude(instance);
         });
 
-        if (instances.length <= 1) {
-          return true;
+        if (filtered.length <= 1) {
+          continue;
         }
       }
 
-      return false;
-    });
+      duplicates[name] = filtered;
+    }
 
     const duplicateCount = Object.keys(duplicates).length;
 

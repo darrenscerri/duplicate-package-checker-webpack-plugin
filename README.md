@@ -1,16 +1,16 @@
-# duplicate-package-checker-webpack-plugin
+# 🕵 duplicate-package-checker-webpack-plugin
 
 [![NPM version][npm-image]][npm-url] [![Downloads][downloads-image]][npm-url] [![Build Status](https://travis-ci.org/darrenscerri/duplicate-package-checker-webpack-plugin.svg?branch=master)](https://travis-ci.org/darrenscerri/duplicate-package-checker-webpack-plugin)
 
-Webpack plugin that warns you when multiple versions of the same package exist in a build.
+Webpack plugin that warns when your bundle contains multiple versions of the same package.
 
 ![duplicate-package-checker-webpack-plugin](https://raw.githubusercontent.com/darrenscerri/duplicate-package-checker-webpack-plugin/master/screenshot.png)
 
 ## Why?
 
-It might be possible that a single package gets included multiple times in a Webpack build due to different package versions. This situation may happen without any warning, resulting in extra bloat in your build and may lead to hard-to-find bugs.
+It might be possible that a single package gets included multiple times in a Webpack bundle due to different package versions. This situation may happen without any warning, resulting in extra bloat in your bundle and may lead to hard-to-find bugs.
 
-This plugin will warn you of such cases to minimize build size and avoid bugs caused by unintended duplicate packages.
+This plugin will warn you of such cases to minimize bundle size and avoid bugs caused by unintended duplicate packages.
 
 Motivation: https://github.com/webpack/webpack/issues/385 and https://github.com/webpack/webpack/issues/646.
 
@@ -42,6 +42,8 @@ new DuplicatePackageCheckerPlugin({
   emitError: true,
   // Show help message if duplicate packages are found (default: true)
   showHelp: false,
+  // Warn also if major versions differ (default: true)
+  strict: false,
   /**
    * Exclude instances of packages from the results.
    * If all instances of a package are excluded, or all instances except one,
@@ -58,6 +60,14 @@ new DuplicatePackageCheckerPlugin({
   }
 });
 ```
+
+## Strict mode
+
+Strict mode warns when multiple packages with different **major** versions (such as `v1.0.0` vs `v2.0.0`) exist in the bundle.
+
+Packages with different major versions introduce backward incompatible changes and require either interventions on third-party packages or unsafe workarounds (such as resolving differing package major versions dependencies with a single version).
+
+It is suggested that strict mode is kept enabled since this improves visibility into your bundle and can help in solving and identifying potential issues.
 
 ## Resolving duplicate packages in your bundle
 
