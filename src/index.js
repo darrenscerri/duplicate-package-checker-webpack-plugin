@@ -17,7 +17,7 @@ function DuplicatePackageCheckerPlugin(options) {
 }
 
 function cleanPath(path) {
-  return path.split("/node_modules/").join("/~/");
+  return path.split(/[\/\\]nodemodules[\/\\]/).join("/~/");
 }
 
 // Get closest package definition from path
