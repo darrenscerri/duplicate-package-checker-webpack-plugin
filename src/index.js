@@ -54,7 +54,10 @@ DuplicatePackageCheckerPlugin.prototype.apply = function(compiler) {
   let exclude = this.options.exclude;
   let strict = this.options.strict;
 
-  compiler.plugin("emit", function(compilation, callback) {
+  compiler.hooks.emit.tapAsync("DuplicatePackageCheckerPlugin", function(
+    compilation,
+    callback
+  ) {
     let context = compilation.compiler.context;
     let modules = {};
 
