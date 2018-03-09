@@ -3,6 +3,7 @@ var DuplicatePackageCheckerPlugin = require("../../src");
 
 module.exports = {
   entry: "./entry.js",
+  mode: "production",
   context: __dirname,
   output: {
     path: path.resolve(__dirname, "dist"),
