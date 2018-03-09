@@ -160,7 +160,14 @@ DuplicatePackageCheckerPlugin.prototype.apply = function(compiler) {
       let array = emitError ? compilation.errors : compilation.warnings;
 
       let i = 0;
-      _.each(duplicates, (instances, name) => {
+
+      let sortedDuplicateKeys = Object.keys(duplicates).sort();
+
+      sortedDuplicateKeys.map(name => {
+        let instances = duplicates[name].sort(
+          (a, b) => (a.version < b.version ? -1 : 1)
+        );
+
         let error =
           name +
           "\n" +
