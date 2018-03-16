@@ -32,6 +32,7 @@ describe("Simple dependency tree", function() {
   });
 
   it("should output errors in production mode", function(done) {
+    jest.useFakeTimers();
     webpack(MakeConfig({ emitError: true }, "production"), function(
       err,
       stats
@@ -42,6 +43,7 @@ describe("Simple dependency tree", function() {
       assert(stats.compilation.warnings.length === 0);
       done();
     });
+    jest.runAllTimers();
   });
 
   it("should ignore excluded duplicates by name", function(done) {
