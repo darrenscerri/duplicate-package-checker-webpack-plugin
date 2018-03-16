@@ -31,6 +31,19 @@ describe("Simple dependency tree", function() {
     });
   });
 
+  it("should output errors in production mode", function(done) {
+    webpack(MakeConfig({ emitError: true }, "production"), function(
+      err,
+      stats
+    ) {
+      expect(stats.compilation.errors[0].message).toMatchSnapshot();
+      expect(stats.compilation.errors[1].message).toMatchSnapshot();
+      assert(stats.compilation.errors.length === 2);
+      assert(stats.compilation.warnings.length === 0);
+      done();
+    });
+  });
+
   it("should ignore excluded duplicates by name", function(done) {
     webpack(
       MakeConfig({
