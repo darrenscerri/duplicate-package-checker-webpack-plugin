@@ -20,6 +20,9 @@
     "lodash": "^4.17.4",
     "semver": "^5.4.1"
   },
+  "jest": {
+    "testEnvironment": "node"
+  },
   "repository": {
     "type": "git",
     "url":
