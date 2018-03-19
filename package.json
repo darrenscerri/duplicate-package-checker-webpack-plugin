@@ -5,7 +5,7 @@
     "Webpack plugin that warns you when multiple versions of the same package exist in a build.",
   "main": "./lib/index.js",
   "scripts": {
-    "test": "jest test/**/*.test.js",
+    "test": "jest test/**/*.test.js --runInBand",
     "build": "babel src --out-dir lib",
     "prepublish": "npm run build",
     "precommit": "lint-staged",
