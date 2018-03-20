@@ -6,7 +6,6 @@ module.exports = function(options, mode = "development") {
     entry: "./entry.js",
     mode,
     context: __dirname,
-    optimization: { minimize: false }, // Disable Uglify since it fails to run in the CI environment
     output: {
       path: path.resolve(__dirname, "dist"),
       filename: "bundle.js"
