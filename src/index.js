@@ -17,7 +17,7 @@ function DuplicatePackageCheckerPlugin(options) {
 }
 
 function cleanPath(path) {
-  return path.split("/node_modules/").join("/~/");
+  return path.split(/[\/\\]node_modules[\/\\]/).join("/~/");
 }
 
 // Get closest package definition from path
@@ -54,7 +54,10 @@ DuplicatePackageCheckerPlugin.prototype.apply = function(compiler) {
   let exclude = this.options.exclude;
   let strict = this.options.strict;
 
-  compiler.plugin("emit", function(compilation, callback) {
+  compiler.hooks.emit.tapAsync("DuplicatePackageCheckerPlugin", function(
+    compilation,
+    callback
+  ) {
     let context = compilation.compiler.context;
     let modules = {};
 
@@ -157,7 +160,14 @@ DuplicatePackageCheckerPlugin.prototype.apply = function(compiler) {
       let array = emitError ? compilation.errors : compilation.warnings;
 
       let i = 0;
-      _.each(duplicates, (instances, name) => {
+
+      let sortedDuplicateKeys = Object.keys(duplicates).sort();
+
+      sortedDuplicateKeys.map(name => {
+        let instances = duplicates[name].sort(
+          (a, b) => (a.version < b.version ? -1 : 1)
+        );
+
         let error =
           name +
           "\n" +
