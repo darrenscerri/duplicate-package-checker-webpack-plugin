@@ -1,6 +1,6 @@
 {
   "name": "duplicate-package-checker-webpack-plugin",
-  "version": "3.0.0",
+  "version": "3.1.0",
   "description":
     "Webpack plugin that warns you when multiple versions of the same package exist in a build.",
   "main": "./lib/index.js",
