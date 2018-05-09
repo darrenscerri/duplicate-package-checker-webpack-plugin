@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Duplicate submodule dependency tree should output warnings if ignoreSameVersionDuplicates == false 1`] = `
+"a
+[0m  Multiple versions of [0m[32m[1ma[22m[39m[37m found:[39m
+[37m[39m    [32m[1m2.0.0[22m[39m [37m[1m./~/c/~/a[22m[39m
+    [32m[1m2.0.0[22m[39m [37m[1m./~/b/~/a[22m[39m
+    [32m[1m2.0.0[22m[39m [37m[1m./~/a[22m[39m
+
+[37m[1mCheck how you can resolve duplicate packages: [22m[39m
+https://github.com/darrenscerri/duplicate-package-checker-webpack-plugin#resolving-duplicate-packages-in-your-bundle
+"
+`;
