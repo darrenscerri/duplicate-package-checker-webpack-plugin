@@ -9,7 +9,8 @@ const defaults = {
   showHelp: true,
   emitError: false,
   exclude: null,
-  strict: true
+  strict: true,
+  ignoreSameVersionDuplicates: true
 };
 
 function DuplicatePackageCheckerPlugin(options) {
@@ -53,6 +54,7 @@ DuplicatePackageCheckerPlugin.prototype.apply = function(compiler) {
   let emitError = this.options.emitError;
   let exclude = this.options.exclude;
   let strict = this.options.strict;
+  let ignoreSameVersionDuplicates = this.options.ignoreSameVersionDuplicates;
 
   compiler.hooks.emit.tapAsync("DuplicatePackageCheckerPlugin", function(
     compilation,
@@ -96,21 +98,15 @@ DuplicatePackageCheckerPlugin.prototype.apply = function(compiler) {
 
       modules[pkg.name] = modules[pkg.name] || [];
 
-      let isSeen = _.find(modules[pkg.name], module => {
-        return module.version === version;
-      });
+      let entry = { version, path: modulePath };
 
-      if (!isSeen) {
-        let entry = { version, path: modulePath };
+      let issuer =
+        module.issuer && module.issuer.resource
+          ? cleanPathRelativeToContext(module.issuer.resource)
+          : null;
+      entry.issuer = issuer;
 
-        let issuer =
-          module.issuer && module.issuer.resource
-            ? cleanPathRelativeToContext(module.issuer.resource)
-            : null;
-        entry.issuer = issuer;
-
-        modules[pkg.name].push(entry);
-      }
+      modules[pkg.name].push(entry);
     });
 
     let duplicates = {};
@@ -123,6 +119,20 @@ DuplicatePackageCheckerPlugin.prototype.apply = function(compiler) {
       }
 
       let filtered = instances;
+      if (ignoreSameVersionDuplicates) {
+        filtered = [];
+        const groups = _.groupBy(instances, instance => instance.version);
+        _.each(groups, group => {
+          if (group.length >= 1) {
+            filtered = filtered.concat(group[0]);
+          }
+        });
+
+        if (filtered.length <= 1) {
+          continue;
+        }
+      }
+
       if (!strict) {
         filtered = [];
         const groups = _.groupBy(instances, instance =>
@@ -130,8 +140,8 @@ DuplicatePackageCheckerPlugin.prototype.apply = function(compiler) {
         );
 
         _.each(groups, group => {
-          if (group.length > 1) {
-            filtered = filtered.concat(group);
+          if (group.length >= 1) {
+            filtered = filtered.concat(group[0]);
           }
         });
 
