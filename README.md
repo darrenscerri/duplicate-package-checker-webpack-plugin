@@ -42,8 +42,8 @@ new DuplicatePackageCheckerPlugin({
   emitError: true,
   // Show help message if duplicate packages are found (default: true)
   showHelp: false,
-  // Warn if same version is duplicated (default: false)
-  ignoreSameVersionDuplicates: false,
+  // Warn if same version is duplicated (default: true), set to false to catch duplicates
+  ignoreSameVersionDuplicates: true,
   // Warn also if major versions differ (default: true)
   strict: false,
   /**

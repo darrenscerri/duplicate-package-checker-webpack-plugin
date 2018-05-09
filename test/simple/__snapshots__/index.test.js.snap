@@ -71,16 +71,16 @@ https://github.com/darrenscerri/duplicate-package-checker-webpack-plugin#resolvi
 exports[`Simple dependency tree should output warnings in verbose 1`] = `
 "a
 [0m  Multiple versions of [0m[32m[1ma[22m[39m[37m found:[39m
-[37m[39m    [32m[1m1.0.0[22m[39m [37m[1m./~/a[22m[39m from [37m[1m.\\\\entry.js[22m[39m
-    [32m[1m2.0.0[22m[39m [37m[1m./~/b/~/a[22m[39m from [37m[1m./~/b\\\\index.js[22m[39m
+[37m[39m    [32m[1m1.0.0[22m[39m [37m[1m./~/a[22m[39m from [37m[1m./entry.js[22m[39m
+    [32m[1m2.0.0[22m[39m [37m[1m./~/b/~/a[22m[39m from [37m[1m./~/b/index.js[22m[39m
 "
 `;
 
 exports[`Simple dependency tree should output warnings in verbose 2`] = `
 "b
 [0m  Multiple versions of [0m[32m[1mb[22m[39m[37m found:[39m
-[37m[39m    [32m[1m1.0.0[22m[39m [37m[1m./~/b[22m[39m from [37m[1m.\\\\entry.js[22m[39m
-    [32m[1m2.0.0[22m[39m [37m[1m./~/c/~/d/~/b[22m[39m from [37m[1m./~/c/~/d\\\\index.js[22m[39m
+[37m[39m    [32m[1m1.0.0[22m[39m [37m[1m./~/b[22m[39m from [37m[1m./entry.js[22m[39m
+    [32m[1m2.0.0[22m[39m [37m[1m./~/c/~/d/~/b[22m[39m from [37m[1m./~/c/~/d/index.js[22m[39m
 
 [37m[1mCheck how you can resolve duplicate packages: [22m[39m
 https://github.com/darrenscerri/duplicate-package-checker-webpack-plugin#resolving-duplicate-packages-in-your-bundle
