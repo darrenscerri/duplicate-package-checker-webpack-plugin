@@ -15,6 +15,9 @@
   "lint-staged": {
     "*.{js,json}": ["prettier --write", "git add"]
   },
+  "engines": {
+    "npm": ">=5.2.0"
+  },
   "dependencies": {
     "chalk": "^2.3.0",
     "find-root": "^1.0.0",
