@@ -105,8 +105,10 @@ DuplicatePackageCheckerPlugin.prototype.apply = function(compiler) {
           ? cleanPathRelativeToContext(module.issuer.resource)
           : null;
       entry.issuer = issuer;
-
-      modules[pkg.name].push(entry);
+      let isIncluded = modules[pkg.name].filter(v => v.path === entry.path);
+      if (isIncluded.length === 0) {
+        modules[pkg.name].push(entry);
+      }
     });
 
     let duplicates = {};
