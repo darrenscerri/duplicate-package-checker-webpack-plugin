@@ -18,8 +18,9 @@ describe("Simple dependency tree", function() {
         strict: false
       }),
       function(err, stats) {
-        assert(stats.compilation.warnings.length === 1);
+        assert(stats.compilation.warnings.length === 2);
         expect(stats.compilation.warnings[0].message).toMatchSnapshot();
+        expect(stats.compilation.warnings[1].message).toMatchSnapshot();
         done();
       }
     );

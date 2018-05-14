@@ -42,6 +42,8 @@ new DuplicatePackageCheckerPlugin({
   emitError: true,
   // Show help message if duplicate packages are found (default: true)
   showHelp: false,
+  // Warn if same version is duplicated (default: true), set to false to catch duplicates
+  ignoreSameVersionDuplicates: false,
   // Warn also if major versions differ (default: true)
   strict: false,
   /**
@@ -60,6 +62,8 @@ new DuplicatePackageCheckerPlugin({
   }
 });
 ```
+## ignoreSameVersion duplicates
+Currently there is a bug in webpack where it can end up bundling duplicate versions of the same module if the module is installed as part of subdependencies, this flag is used to detect such cases. Please refer to https://github.com/webpack/webpack/issues/5593 for further details.
 
 ## Strict mode
 
