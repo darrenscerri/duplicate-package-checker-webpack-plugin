@@ -8,6 +8,7 @@
     "test": "jest test/**/*.test.js --runInBand",
     "build": "babel src --out-dir lib",
     "prepublish": "npm run build",
+    "install": "npm run build",
     "precommit": "lint-staged",
     "pretty": "prettier --write \"src/**/*.{json,js}\" \"test/**/*.{json,js}\""
   },
