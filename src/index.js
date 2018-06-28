@@ -8,6 +8,7 @@ const defaults = {
   verbose: false,
   showHelp: true,
   emitError: false,
+  emitWarning: true,
   exclude: null,
   strict: true
 };
@@ -51,6 +52,7 @@ DuplicatePackageCheckerPlugin.prototype.apply = function(compiler) {
   let verbose = this.options.verbose;
   let showHelp = this.options.showHelp;
   let emitError = this.options.emitError;
+  let emitWarning = this.options.emitWarning;
   let exclude = this.options.exclude;
   let strict = this.options.strict;
 
@@ -180,7 +182,11 @@ DuplicatePackageCheckerPlugin.prototype.apply = function(compiler) {
             "Check how you can resolve duplicate packages: "
           )}\nhttps://github.com/darrenscerri/duplicate-package-checker-webpack-plugin#resolving-duplicate-packages-in-your-bundle\n`;
         }
-        array.push(new Error(error));
+        if (emitWarning) {
+          array.push(new Error(error));
+        } else {
+          console.log(error);
+        }
       });
     }
 

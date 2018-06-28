@@ -40,6 +40,8 @@ new DuplicatePackageCheckerPlugin({
   verbose: true,
   // Emit errors instead of warnings (default: false)
   emitError: true,
+  // If set to false, warnings & errors will not be emitted. The conflicting packages will be printed out to the console instead. (default: true)
+  emitWarning: true, 
   // Show help message if duplicate packages are found (default: true)
   showHelp: false,
   // Warn also if major versions differ (default: true)
