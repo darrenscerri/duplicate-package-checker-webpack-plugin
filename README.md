@@ -44,6 +44,8 @@ new DuplicatePackageCheckerPlugin({
   showHelp: false,
   // Warn also if major versions differ (default: true)
   strict: false,
+  // Pnpm mode: warn if a package is included from two different paths (default: false)
+  pnpm: false,
   /**
    * Exclude instances of packages from the results.
    * If all instances of a package are excluded, or all instances except one,
@@ -68,6 +70,18 @@ Strict mode warns when multiple packages with different **major** versions (such
 Packages with different major versions introduce backward incompatible changes and require either interventions on third-party packages or unsafe workarounds (such as resolving differing package major versions dependencies with a single version).
 
 It is suggested that strict mode is kept enabled since this improves visibility into your bundle and can help in solving and identifying potential issues.
+
+## Pnpm mode
+
+Consider this common scenario. `A` depends on both `B` and `C`. Further, `B` depends on `C`. There are two separate packages pulling in `C`. Sometimes the versions of `C` will be different.
+
+Npm and Yarn arrange their packages in a single folder. When a conflict like this comes up, they pick one instance of `C` to keep, and throw out the rest. Not always easy (or correct) when multiple versions of `C` are in play, but its the way things work and people understand the mechanism.
+
+Pnpm isolates package dependencies to avoid bugs that come from this npm/yarn design choice. Pnpm keeps both instances of `C` (even if they are the same version). Each instance is scoped to the package which depends on it. **That means each instance has a unique path on the file system.**
+
+When webpack puts the bundle together, it sees both paths to `C`. It identifies them as different packages and includes them both. Now you have two of everthing, including globals, which is a Bad Thing&trade;.
+
+Pnpm mode detects this condition and warns you when it happens. Remember, the versions don't matter so much. They may be the same. It's the paths which are important.
 
 ## Resolving duplicate packages in your bundle
 

@@ -16,8 +16,10 @@ function DuplicatePackageCheckerPlugin(options) {
   this.options = _.extend({}, defaults, options);
 }
 
-function cleanPath(path) {
-  return path.split(/[\/\\]node_modules[\/\\]/).join("/~/");
+function cleanPath(p) {
+  // normalize paths since they are compared when pnpm mode is active
+  const normPath = path.normalize(p);
+  return normPath.split(/[\/\\]node_modules[\/\\]/).join("/~/");
 }
 
 // Get closest package definition from path
@@ -53,12 +55,14 @@ DuplicatePackageCheckerPlugin.prototype.apply = function(compiler) {
   let emitError = this.options.emitError;
   let exclude = this.options.exclude;
   let strict = this.options.strict;
+  let pnpm = this.options.pnpm;
 
   compiler.hooks.emit.tapAsync("DuplicatePackageCheckerPlugin", function(
     compilation,
     callback
   ) {
-    let context = compilation.compiler.context;
+    // normalize paths since they are compared when pnpm mode is active
+    let context = path.normalize(compilation.compiler.context);
     let modules = {};
 
     function cleanPathRelativeToContext(modulePath) {
@@ -97,6 +101,13 @@ DuplicatePackageCheckerPlugin.prototype.apply = function(compiler) {
       modules[pkg.name] = modules[pkg.name] || [];
 
       let isSeen = _.find(modules[pkg.name], module => {
+        if (pnpm) {
+          // pnpm isolates dependencies hierarchically. it is possible for
+          // the same package version to be referenced from two different
+          // locations. webpack treats these as different packages and
+          // includes them both.
+          return module.path === modulePath;
+        }
         return module.version === version;
       });
 
