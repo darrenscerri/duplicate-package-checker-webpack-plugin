@@ -9,7 +9,8 @@ const defaults = {
   showHelp: true,
   emitError: false,
   exclude: null,
-  strict: true
+  strict: true,
+  helpMessage: null
 };
 
 function DuplicatePackageCheckerPlugin(options) {
@@ -53,6 +54,7 @@ DuplicatePackageCheckerPlugin.prototype.apply = function(compiler) {
   let emitError = this.options.emitError;
   let exclude = this.options.exclude;
   let strict = this.options.strict;
+  let helpMessage = this.options.helpMessage;
 
   compiler.hooks.emit.tapAsync("DuplicatePackageCheckerPlugin", function(
     compilation,
@@ -186,9 +188,13 @@ DuplicatePackageCheckerPlugin.prototype.apply = function(compiler) {
         error += `    ${instances.join("\n    ")}\n`;
         // only on last warning
         if (showHelp && ++i === duplicateCount) {
-          error += `\n${chalk.white.bold(
-            "Check how you can resolve duplicate packages: "
-          )}\nhttps://github.com/darrenscerri/duplicate-package-checker-webpack-plugin#resolving-duplicate-packages-in-your-bundle\n`;
+          if (helpMessage) {
+            error += `\n${helpMessage}\n`;
+          } else {
+            error += `\n${chalk.white.bold(
+              "Check how you can resolve duplicate packages: "
+            )}\nhttps://github.com/darrenscerri/duplicate-package-checker-webpack-plugin#resolving-duplicate-packages-in-your-bundle\n`;
+          }
         }
         array.push(new Error(error));
       });

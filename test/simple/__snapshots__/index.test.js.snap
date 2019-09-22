@@ -11,6 +11,24 @@ https://github.com/darrenscerri/duplicate-package-checker-webpack-plugin#resolvi
 "
 `;
 
+exports[`Simple dependency tree should output custom help message 1`] = `
+"a
+[0m  Multiple versions of [0m[32m[1ma[22m[39m[37m found:[39m
+[37m[39m    [32m[1m1.0.0[22m[39m [37m[1m./~/a[22m[39m
+    [32m[1m2.0.0[22m[39m [37m[1m./~/b/~/a[22m[39m
+"
+`;
+
+exports[`Simple dependency tree should output custom help message 2`] = `
+"b
+[0m  Multiple versions of [0m[32m[1mb[22m[39m[37m found:[39m
+[37m[39m    [32m[1m1.0.0[22m[39m [37m[1m./~/b[22m[39m
+    [32m[1m2.0.0[22m[39m [37m[1m./~/c/~/d/~/b[22m[39m
+
+Check http://foo.bar.com/baz for more details
+"
+`;
+
 exports[`Simple dependency tree should output errors 1`] = `
 "a
 [0m  Multiple versions of [0m[32m[1ma[22m[39m[37m found:[39m
