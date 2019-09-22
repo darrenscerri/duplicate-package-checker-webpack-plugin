@@ -42,6 +42,8 @@ new DuplicatePackageCheckerPlugin({
   emitError: true,
   // Show help message if duplicate packages are found (default: true)
   showHelp: false,
+  // A custom help message (default: null)
+  helpMessage: "Check http://foo.bar.com/baz for more details how to update pacakges",
   // Warn also if major versions differ (default: true)
   strict: false,
   /**

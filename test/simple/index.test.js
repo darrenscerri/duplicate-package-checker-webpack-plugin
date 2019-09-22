@@ -31,6 +31,20 @@ describe("Simple dependency tree", function() {
     });
   });
 
+  it("should output custom help message", function(done) {
+    webpack(
+      MakeConfig({
+        emitError: true,
+        helpMessage: "Check http://foo.bar.com/baz for more details"
+      }),
+      function(err, stats) {
+        expect(stats.compilation.errors[0].message).toMatchSnapshot();
+        expect(stats.compilation.errors[1].message).toMatchSnapshot();
+        done();
+      }
+    );
+  });
+
   it("should output errors in production mode", function(done) {
     webpack(MakeConfig({ emitError: true }, "production"), function(
       err,
