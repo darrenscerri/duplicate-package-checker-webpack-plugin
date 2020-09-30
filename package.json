@@ -1,8 +1,7 @@
 {
   "name": "duplicate-package-checker-webpack-plugin",
   "version": "2.1.0",
-  "description":
-    "Webpack plugin that warns you when multiple versions of the same package exist in a build.",
+  "description": "Webpack plugin that warns you when multiple versions of the same package exist in a build.",
   "main": "./lib/index.js",
   "scripts": {
     "test": "jest test/**/*.test.js --runInBand",
@@ -12,7 +11,10 @@
     "pretty": "prettier --write \"src/**/*.{json,js}\" \"test/**/*.{json,js}\""
   },
   "lint-staged": {
-    "*.{js,json}": ["prettier --write", "git add"]
+    "*.{js,json}": [
+      "prettier --write",
+      "git add"
+    ]
   },
   "dependencies": {
     "chalk": "^2.3.0",
@@ -25,18 +27,18 @@
   },
   "repository": {
     "type": "git",
-    "url":
-      "git+https://github.com/darrenscerri/duplicate-package-checker-webpack-plugin.git"
+    "url": "git+https://github.com/darrenscerri/duplicate-package-checker-webpack-plugin.git"
   },
-  "keywords": ["webpack", "plugin"],
+  "keywords": [
+    "webpack",
+    "plugin"
+  ],
   "author": "Darren Scerri <darrenscerri@gmail.com>",
   "license": "MIT",
   "bugs": {
-    "url":
-      "https://github.com/darrenscerri/duplicate-package-checker-webpack-plugin/issues"
+    "url": "https://github.com/darrenscerri/duplicate-package-checker-webpack-plugin/issues"
   },
-  "homepage":
-    "https://github.com/darrenscerri/duplicate-package-checker-webpack-plugin#readme",
+  "homepage": "https://github.com/darrenscerri/duplicate-package-checker-webpack-plugin#readme",
   "devDependencies": {
     "babel-cli": "^6.24.0",
     "babel-core": "^6.24.0",
@@ -46,6 +48,6 @@
     "jest": "^22.4.2",
     "lint-staged": "^5.0.0",
     "prettier": "^1.11.1",
-    "webpack": "^4.1.1"
+    "webpack": "5.0.0-rc.3"
   }
 }

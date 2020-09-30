@@ -16,8 +16,8 @@ function DuplicatePackageCheckerPlugin(options) {
   this.options = _.extend({}, defaults, options);
 }
 
-function cleanPath(path) {
-  return path.split(/[\/\\]node_modules[\/\\]/).join("/~/");
+function cleanPath(pathToClean) {
+  return pathToClean.split(/[\/\\]node_modules[\/\\]/).join("/~/");
 }
 
 // Get closest package definition from path
@@ -103,11 +103,11 @@ DuplicatePackageCheckerPlugin.prototype.apply = function(compiler) {
       if (!isSeen) {
         let entry = { version, path: modulePath };
 
-        let issuer =
-          module.issuer && module.issuer.resource
-            ? cleanPathRelativeToContext(module.issuer.resource)
-            : null;
-        entry.issuer = issuer;
+        let issuer = compilation.moduleGraph.getIssuer(module);
+
+        entry.issuer = issuer
+          ? cleanPathRelativeToContext(issuer.resource)
+          : null;
 
         modules[pkg.name].push(entry);
       }
@@ -164,8 +164,8 @@ DuplicatePackageCheckerPlugin.prototype.apply = function(compiler) {
       let sortedDuplicateKeys = Object.keys(duplicates).sort();
 
       sortedDuplicateKeys.map(name => {
-        let instances = duplicates[name].sort(
-          (a, b) => (a.version < b.version ? -1 : 1)
+        let instances = duplicates[name].sort((a, b) =>
+          a.version < b.version ? -1 : 1
         );
 
         let error =
