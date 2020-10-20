@@ -48,6 +48,6 @@
     "jest": "^22.4.2",
     "lint-staged": "^5.0.0",
     "prettier": "^1.11.1",
-    "webpack": "5.0.0-rc.3"
+    "webpack": "^5.1.3"
   }
 }
